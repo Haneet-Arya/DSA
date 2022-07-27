@@ -24,6 +24,57 @@ public class Linkedlist {
 
 }
 
+class Node1{
+    int data;
+    Node1 next;
+    Node1 random;
+    public Node1(int data){
+        this.data = data;
+
+    }
+
+    /** We need to create a clone of the given linkedlist along with the random pointers
+     * one way to do it is to use two nested loops but it will give the time complexity of O(n^2).
+     *
+     * Another way is to create hashmap
+     * of mapping <Node1,Node1> and then we will map the corresponding nodes of both linkedlist and then we will iterate through the
+     * first linked list and check for the random pointer and will get the node for the second list using the hashmap for the node
+     * we get from the random pointer and will save in the random pointer of current node. It will be done in O(n) time complexity
+     * and O(n) space complexity because of hashmap
+     *
+     * the best method is to link both the linkedlist to eachother and then modify accrdingly and the retrieve the linked list
+     * as below
+     * */
+    public static Node1 duplicate(Node1 head){
+        Node1 cur = head;
+//        Inserting new nodes in between
+        while(cur!=null){
+            Node1 temp = cur.next;
+            cur.next = new Node1(cur.data);
+            cur.next.next=temp;
+            cur = temp;
+        }
+//        setting random pointers
+        cur = head;
+        while(cur!=null){
+            if(cur.next!=null){
+                cur.next.random = (cur.random!=null)?cur.random.next:null;
+            }
+            cur = cur.next.next;
+        }
+//        separating the list
+        Node1 orig = head;
+        Node1 copy = head.next;
+        Node1 temp = copy;
+        while(orig!=null){
+            orig.next = orig.next.next;
+            copy.next=copy.next.next;
+            orig = orig.next;
+            copy = copy.next;
+        }
+        return temp;
+    }
+}
 class Node<T> {
     int data;
     Node<T> next;
@@ -165,6 +216,7 @@ class Node<T> {
         }
         return null;
     }
+
 
 
 }
